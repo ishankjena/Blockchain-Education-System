@@ -1,34 +1,32 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Certificate is ERC721 {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIdCounter;
-
     struct CertificateData {
+        uint256 timeOfIssue;
         string data;
-        uint256 issueTime;
         address student;
     }
 
-    mapping(uint256 => CertificateData) private _certificateData;
+    mapping(uint256 => CertificateData) public certificateData;
+    uint256 private _currentTokenId;
 
-    constructor() ERC721("Certificate", "CERT") {}
-
-    function issueCertificate(address _student, string memory _data) public {
-        uint256 tokenId = _tokenIdCounter.current();
-        _safeMint(_student, tokenId);
-        _certificateData[tokenId] = CertificateData(_data, block.timestamp, _student);
-        _tokenIdCounter.increment();
+    constructor(string memory name, string memory symbol) ERC721(name, symbol) {
+        _currentTokenId = 0;
     }
 
-    function getCertificateData(uint256 _tokenId) public view returns (string memory, uint256, address) {
-        require(_exists(_tokenId), "Certificate does not exist");
-        CertificateData memory data = _certificateData[_tokenId];
-        return (data.data, data.issueTime, data.student);
+    function issueCertificate(address _student, string memory _certificateData) public {
+        _currentTokenId++;
+        uint256 tokenId = _currentTokenId;
+        certificateData[tokenId] = CertificateData(block.timestamp, _certificateData, _student);
+        _safeMint(_student, tokenId);
+    }
+
+    function getCertificate(uint256 tokenId) public view returns (uint256, string memory, address) {
+        CertificateData memory data = certificateData[tokenId];
+        return (data.timeOfIssue, data.data, data.student);
     }
 }
