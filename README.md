@@ -256,3 +256,8 @@ express their readiness for career advancement on their own terms. By empowering
 students to proactively showcase their strengths and career interests, the platform
 facilitates seamless transitions from education to employment, driving economic
 empowerment and fostering a dynamic talent ecosystem.
+
+
+## Technical Implementation Overview
+
+![image](https://github.com/ishankjena/Blockchain-Education-System/assets/62696808/2f1f3c46-844f-4658-91db-07321903b518)
